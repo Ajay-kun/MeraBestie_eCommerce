@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+    <link rel="stylesheet" href="/css/category.css">
+<%- include('partials/header') %>
+<body>
+    <main>
+
+        <section class="category-hero fade-in" style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('/images/homebg.jpg')">
+            <div class="hero-content">
+                <h1><%= category.title %></h1>
+                <p><%= category.description %></p>
+            </div>
+        </section>
+        <div class="area" >
+            <ul class="circles">
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+            </ul>
+    </div >
+
+     
+        <section class="products fade-in">
+            <div class="products-grid">
+                <% category.products.forEach(product => { %>
+                    <div class="product-card slide-in">
+                        <div class="product-image">
+                            <img src="<%= product.image %>" alt="<%= product.name %>">
+                            <div class="quick-view">
+                                <span>Quick View</span>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <div class="product-category">
+                                <%= category.title %>
+                            </div>
+                            <h3><%= product.name %></h3>
+                            <div class="product-details">
+                                <p class="description"><%= product.description %></p>
+                                <div class="price-rating">
+                                    <p class="price">₹<%= product.price %></p>
+                                    <div class="rating">
+                                        ★★★★☆
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="add-to-cart-btn" onclick="addToCart(<%= JSON.stringify(product) %>)">
+                                <span class="cart-icon">🛒</span>Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
+        </section>
+    </main>
+    <%- include('partials/footer') %>
+    <script src="/js/main.js"></script>
+    <script>
+        async function addToCart(product) {
+            try {
+                const response = await fetch('/add-to-cart', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(product)
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                   
+                    window.location.href = '/checkout';
+                }
+            } catch (error) {
+                console.error('Error adding to cart:', error);
+                alert('Failed to add item to cart');
+            }
+        }
+        </script>
+</body>
+</html> 

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/Adminheader') %>
+<link rel="stylesheet" href="/css/admin-dashboard.css">
+<link rel="stylesheet" href="/css/admin-products.css">
+
+<body class="admin-body">
+    <div class="admin-container">
+        <main class="admin-main">
+      
+            <header class="admin-header">
+                <div class="header-title">
+                    <h2>Products Management</h2>
+                    <div class="header-actions">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="productSearch" placeholder="Search products...">
+                        </div>
+                        <button class="btn-primary" onclick="window.location.href='/admin/add-product'">
+                            <i class="fas fa-plus"></i> Add New Product
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+          
+            <div class="category-tabs">
+                <button class="tab-btn active" data-category="all">All Products</button>
+                <% categories.forEach(category => { %>
+                    <button class="tab-btn" data-category="<%= category %>">
+                        <%= category %>
+                    </button>
+                <% }); %>
+            </div>
+
+   
+            <div class="products-container">
+                <% Object.entries(categoryData).forEach(([category, data]) => { %>
+                    <div class="category-section" data-category="<%= category %>">
+                        <div class="category-header">
+                            <h3><%= category %></h3>
+                            <span class="product-count"><%= data.products.length %> Products</span>
+                        </div>
+                        
+                        <div class="products-grid">
+                            <% data.products.forEach(product => { %>
+                                <div class="product-card">
+                                    <div class="product-image">
+                                        <img src="<%= product.image %>" alt="<%= product.name %>">
+                                        <div class="product-actions">
+                                            <button class="action-btn edit" onclick="editProduct('<%= product._id %>')">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="action-btn delete" onclick="deleteProduct('<%= product._id %>')">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="product-info">
+                                        <h4 class="product-name"><%= product.name %></h4>
+                                        <span class="product-category"><%= product.category %></span>
+                                        <div class="product-details">
+                                            <span class="product-price">₹<%= product.price %></span>
+                                            <span class="stock-status <%= product.stock > 10 ? 'in-stock' : product.stock > 0 ? 'low-stock' : 'out-of-stock' %>">
+                                                <%= product.stock %> in stock
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% }); %>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+    <script src="/js/admin-products.js"></script>
+</body>
+</html> 

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/Adminheader') %>
+<link rel="stylesheet" href="/css/admin-dashboard.css">
+<body class="admin-body">
+    <div class="admin-container">
+        <main class="admin-main">
+        
+            <header class="admin-header">
+                <div class="header-search">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Type to search...">
+                </div>
+                <div class="header-right">
+                    <div class="notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge pulse">3</span>
+                    </div>
+                    <div class="admin-profile">
+                        <div class="profile-info">
+                            <span class="admin-name"><%= user.name %></span>
+                            <span class="admin-role">Administrator</span>
+                        </div>
+                        <div class="profile-actions">
+                            <a href="/logout" class="logout-btn" title="Logout">
+                                <i class="fas fa-sign-out-alt"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="dashboard-content">
+             
+                <div class="dashboard-stats">
+                    <div class="stat-card gradient-blue">
+                        <div class="stat-content">
+                            <div class="stat-icon">
+                                <i class="fas fa-shopping-bag"></i>
+                            </div>
+                            <div class="stat-details">
+                                <h3>Total Products</h3>
+                                <p class="stat-number"><%- Object.values(categoryData).reduce((acc, cat) => acc + cat.products.length, 0) %></p>
+                                <div class="stat-trend">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span class="stat-change">+5% from last month</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stat-card gradient-green">
+                        <div class="stat-content">
+                            <div class="stat-icon">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                            <div class="stat-details">
+                                <h3>Revenue</h3>
+                                <p class="stat-number">₹52,489</p>
+                                <div class="stat-trend">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span class="stat-change">+12% from last month</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stat-card gradient-orange">
+                        <div class="stat-content">
+                            <div class="stat-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-details">
+                                <h3>Total Orders</h3>
+                                <p class="stat-number">128</p>
+                                <div class="stat-trend">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span class="stat-change">+8% from last month</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stat-card gradient-pink">
+                        <div class="stat-content">
+                            <div class="stat-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="stat-details">
+                                <h3>Reviews</h3>
+                                <p class="stat-number">4.8</p>
+                                <div class="stat-trend neutral">
+                                    <i class="fas fa-equals"></i>
+                                    <span class="stat-change">Same as last month</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="dashboard-grid">
+                    <% Object.entries(categoryData).forEach(([category, data]) => { %>
+                        <div class="grid-card category-section">
+                            <div class="card-header">
+                                <div class="header-title">
+                                    <h3><%= category %></h3>
+                                    <span class="subtitle"><%= data.products.length %> Products</span>
+                                </div>
+                                <button class="btn-primary add-product" onclick="window.location.href='/admin/add-product?category=<%= category %>'">
+                                    <i class="fas fa-plus"></i> Add to <%= category %>
+                                </button>
+                            </div>
+                            <div class="product-list">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Image</th>
+                                            <th>Name</th>
+                                            <th>Price</th>
+                                            <th>Stock</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% data.products.forEach(product => { %>
+                                            <tr>
+                                                <td>
+                                                    <div class="product-image">
+                                                        <img src="<%= product.image %>" alt="<%= product.name %>">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="product-name">
+                                                        <%= product.name %>
+                                                        <span class="product-id">#<%= product._id %></span>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="product-price">₹<%= product.price %></div>
+                                                </td>
+                                                <td>
+                                                    <div class="stock-status <%= product.stock > 10 ? 'in-stock' : product.stock > 0 ? 'low-stock' : 'out-of-stock' %>">
+                                                        <%= product.stock %> units
+                                                    </div>
+                                                </td>
+                                                <td class="actions">
+                                                    <button class="btn-icon edit" title="Edit" onclick="editProduct('<%= product._id %>')">
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
+                                                    <button class="btn-icon delete" title="Delete" onclick="deleteProduct('<%= product._id %>')">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        <% }); %>
+                                        <% if (data.products.length === 0) { %>
+                                            <tr>
+                                                <td colspan="5" class="empty-category">
+                                                    <div class="empty-state">
+                                                        <i class="fas fa-box-open"></i>
+                                                        <p>No products in <%= category %></p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+    <script src="/js/admin.js"></script>
+</body>
+</html> 

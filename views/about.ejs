@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/about.css">
+    <title>About Us - MERA Bestie</title>
+</head>
+<body>
+    <%- include('partials/header') %>
+    <main class="about-container">
+        <section class="about-intro">
+            <h1>Welcome to MERA Bestie</h1>
+            <p>Your one-stop destination for thoughtful gifts that celebrate every occasion.</p>
+        </section>
+        
+        <section class="features">
+            <h2>Our Features</h2>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <h3>Couple Gifts</h3>
+                    <p>Special gifts designed to celebrate love and togetherness.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Gift Cards</h3>
+                    <p>Perfect for any occasion, allowing your loved ones to choose their gifts.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Stationery Items</h3>
+                    <p>Premium quality stationery for all your writing needs.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Greeting Cards</h3>
+                    <p>Beautifully crafted cards for every occasion to express your feelings.</p>
+                </div>
+            </div>
+        </section>
+       
+    </main>
+    
+    <%- include('partials/footer') %>
+    <script src="/js/about.js"></script>
+    <script>
+        function toggleTheme() {
+    const body = document.body;
+    body.classList.toggle('dark-theme');
+
+ 
+    if (body.classList.contains('dark-theme')) {
+        localStorage.setItem('theme', 'dark');
+    } else {
+        localStorage.setItem('theme', 'light');
+    }
+}
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-theme');
+    }
+}); 
+    </script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('./partials/header') %>
+    <link rel="stylesheet" href="/css/products.css">
+</head>
+<body>
+   
+
+    <div class="products-container">
+     
+        <div class="products-hero">
+            <h1>Our Collections</h1>
+            <p>Discover unique gifts and stationery for every occasion</p>
+        </div>
+        <div class="area" >
+            <ul class="circles">
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+            </ul>
+    </div >
+
+       
+        <% Object.entries(categoryData).forEach(([categoryId, category]) => { %>
+            <section class="category-section" id="<%= categoryId %>">
+                <div class="category-header">
+                    <h2><%= category.title %></h2>
+                    <p><%= category.description %></p>
+                </div>
+
+                <div class="products-grid">
+                    <% category.products.forEach(product => { %>
+                        <div class="product-card">
+                            <div class="product-image">
+                                <img src="<%= product.image %>" alt="<%= product.name %>">
+                                <div class="product-overlay">
+                                    <button class="quick-view-btn" onclick="quickView('<%= JSON.stringify(product) %>')">
+                                        Quick View
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="product-info">
+                                <h3><%= product.name %></h3>
+                                <p class="product-description"><%= product.description %></p>
+                                <p class="product-price">₹<%= product.price %></p>
+                                <button class="add-to-cart-btn" onclick="addToCart(<%= JSON.stringify(product) %>)">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+            </section>
+        <% }); %>
+    </div>
+
+ 
+    <div id="quickViewModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <%- include('./partials/footer') %>
+    <script>
+    async function addToCart(product) {
+        try {
+            const response = await fetch('/add-to-cart', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(product)
+            });
+            
+            const result = await response.json();
+            if (result.success) {
+             
+                window.location.href = '/checkout';
+            }
+        } catch (error) {
+            console.error('Error adding to cart:', error);
+            alert('Failed to add item to cart');
+        }
+    }
+
+
+function toggleTheme() {
+    const body = document.body;
+    body.classList.toggle('dark-theme');
+
+
+    if (body.classList.contains('dark-theme')) {
+        localStorage.setItem('theme', 'dark');
+    } else {
+        localStorage.setItem('theme', 'light');
+    }
+}
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-theme');
+    }
+});
+    </script>
+</body>
+</html>

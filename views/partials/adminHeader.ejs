@@ -1,0 +1,50 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/auth.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<header class="main-header">
+    <nav class="nav-container">
+        <div class="logo">
+            <a href="/">MERA Besite</a>
+        </div>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/products">Products</a></li>
+            <% if (typeof user !== 'undefined' && user) { %>
+                <% if (user.role === 'admin') { %>
+                    <li><a href="/admin" style="color: rgb(95, 163, 226); text-decoration: none;">Admin Dashboard</a></li>
+                <% } %>
+                <li><a href="/logout">Logout</a></li>
+            <% } else { %>
+                <li><a href="/login">Login</a></li>
+            <% } %>
+            <button id="theme-toggle" onclick="toggleTheme()"><span class="theme-icon fas fa-moon"></span></button>
+        </ul>
+    </nav>
+</header> 
+<script>
+    function toggleTheme() {
+    const body = document.body;
+    body.classList.toggle('dark-theme');
+
+    
+    if (body.classList.contains('dark-theme')) {
+        localStorage.setItem('theme', 'dark');
+    } else {
+        localStorage.setItem('theme', 'light');
+    }
+}
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-theme');
+    }
+}); 
+</script>

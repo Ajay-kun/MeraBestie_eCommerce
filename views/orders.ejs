@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+    <link rel="stylesheet" href="/css/order.css">
+<%- include('partials/header') %>
+<body>
+    <main class="orders-container">
+        <h1>My Orders</h1>
+        
+        <div class="orders-list">
+            <% orders.forEach(order => { %>
+                <div class="order-card">
+                    <div class="order-header">
+                        <div>
+                            <h3>Order #<%= order.id %></h3>
+                            <p class="order-date">Placed on: <%= order.date %></p>
+                        </div>
+                        <span class="order-status <%= order.status.toLowerCase() %>">
+                            <%= order.status %>
+                        </span>
+                    </div>
+                    
+                    <div class="order-items">
+                        <% order.items.forEach(item => { %>
+                            <div class="order-item">
+                                <p class="item-name"><%= item.name %></p>
+                                <p class="item-quantity">Qty: <%= item.quantity %></p>
+                                <p class="item-price">₹<%= item.price %></p>
+                            </div>
+                        <% }); %>
+                    </div>
+                    
+                    <div class="order-footer">
+                        <p class="order-total">Total: ₹<%= order.total %></p>
+                        <% if (order.status === 'Processing') { %>
+                            <button class="btn-cancel">Cancel Order</button>
+                        <% } %>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    </main>
+    <%- include('partials/footer') %>
+    <script src="/js/orders.js"></script>
+    <script>
+   
+function toggleTheme() {
+    const body = document.body;
+    body.classList.toggle('dark-theme');
+
+   
+    if (body.classList.contains('dark-theme')) {
+        localStorage.setItem('theme', 'dark');
+    } else {
+        localStorage.setItem('theme', 'light');
+    }
+}
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-theme');
+    }
+});
+    </script>
+</body>
+</html> 
